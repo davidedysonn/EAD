@@ -25,26 +25,26 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAllUsers(){
+    public ResponseEntity<List<UserModel>> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> getOneUser(@PathVariable(value = "userId")UUID userId){
+    public ResponseEntity<Object> getOneUser(@PathVariable(value = "userId") UUID userId) {
         Optional<UserModel> userModelOptional = userService.findById(userId);
-        if(!userModelOptional.isPresent()){
+        if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
         }
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUser(@PathVariable(value = "userId") UUID userId){
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "userId") UUID userId) {
         Optional<UserModel> userModelOptional = userService.findById(userId);
-        if(!userModelOptional.isPresent()){
+        if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }else{
+        } else {
             userService.delete(userModelOptional.get());
             return ResponseEntity.status(HttpStatus.OK).body("User deleted success");
         }
@@ -54,11 +54,11 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateteUser(@PathVariable(value = "userId") UUID userId,
                                                @RequestBody @Validated(UserDto.UserView.UserPut.class)
-                                               @JsonView(UserDto.UserView.UserPut.class) UserDto userDto){
+                                               @JsonView(UserDto.UserView.UserPut.class) UserDto userDto) {
         Optional<UserModel> userModelOptional = userService.findById(userId);
-        if(!userModelOptional.isPresent()){
+        if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }else{
+        } else {
             UserModel userModel = userModelOptional.get();
             userModel.setFullName(userDto.getFullName());
             userModel.setPhoneNumber(userDto.getPhoneNumber());
@@ -73,14 +73,15 @@ public class UserController {
     @PutMapping("/{userId}/password")
     public ResponseEntity<Object> updatePassword(@PathVariable(value = "userId") UUID userId,
                                                  @RequestBody @Validated(UserDto.UserView.PasswordPut.class)
-                                                 @JsonView(UserDto.UserView.PasswordPut.class) UserDto userDto){
+                                                 @JsonView(UserDto.UserView.PasswordPut.class) UserDto userDto) {
         Optional<UserModel> userModelOptional = userService.findById(userId);
-        if(!userModelOptional.isPresent()){
+        if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 
-        } if(!userModelOptional.get().getPassword().equals(userDto.getOldPassword())){
+        }
+        if (!userModelOptional.get().getPassword().equals(userDto.getOldPassword())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Missmatched old password!");
-        }else{
+        } else {
             UserModel userModel = userModelOptional.get();
             userModel.setPassword(userDto.getPassword());
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
@@ -93,12 +94,12 @@ public class UserController {
     @PutMapping("/{userId}/image")
     public ResponseEntity<Object> updateImage(@PathVariable(value = "userId") UUID userId,
                                               @RequestBody @Validated(UserDto.UserView.ImagePut.class)
-                                              @JsonView(UserDto.UserView.ImagePut.class) UserDto userDto){
+                                              @JsonView(UserDto.UserView.ImagePut.class) UserDto userDto) {
         Optional<UserModel> userModelOptional = userService.findById(userId);
-        if(!userModelOptional.isPresent()){
+        if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 
-        }else{
+        } else {
             UserModel userModel = userModelOptional.get();
             userModel.setImageUrl(userDto.getImageUrl());
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
