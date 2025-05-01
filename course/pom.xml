@@ -14,6 +14,9 @@
 	<name>course</name>
 	<description>Gerenciador de cursos</description>
 	<url/>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
 	<licenses>
 		<license/>
 	</licenses>
@@ -26,9 +29,6 @@
 		<tag/>
 		<url/>
 	</scm>
-	<properties>
-		<java.version>11</java.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
