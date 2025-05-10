@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/users")
@@ -37,7 +40,14 @@ public class UserController {
                                                            Pageable pageable) {
 
         Page<UserModel> userModelPage = userService.findAll(spec, pageable);
-
+        if(!userModelPage.isEmpty()){
+            // USANDO O "for(UserModel user: userModelPage)" seria mais interessante porque ele faria
+            // apenas na pagina solicitada ou seja, respeitaria a paginacao em vez de fazer a busca
+            // completa no banco fazendo ele pesar dependendo da quantidade de informacao e usurios solicitando.
+            for(UserModel user: userModelPage.toList()){
+                user.add(linkTo(methodOn(UserController.class).getOneUser(user.getUserId())).withSelfRel());
+            }
+        }
         return ResponseEntity.status(HttpStatus.OK).body(userModelPage);
     }
 
