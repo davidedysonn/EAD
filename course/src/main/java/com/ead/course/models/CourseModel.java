@@ -4,11 +4,13 @@ import com.ead.course.enums.CourseLevel;
 import com.ead.course.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -38,5 +40,14 @@ public class CourseModel implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CourseLevel courseLevel;
+    @Column(nullable = false)
     private UUID userInstructor;
+
+    /*
+    * Ele nao vai mostrar o campo quando fizer um get.
+    * ou seja no json nao vai ter aquele monte de repeticao
+    */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "course")
+    private Set<ModuleModel> modules;
 }
