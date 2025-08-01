@@ -1,5 +1,6 @@
 package com.ead.course.repositories;
 
+import com.ead.course.models.CourseModel;
 import com.ead.course.models.ModuleModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,5 @@ public interface ModuleRepository extends JpaRepository<ModuleModel, UUID> {
     // @Modifying poderia ser usado caso fosse nescessario um update ou um delete customizado
     @Query(value = "select * from tb_modules where course_course_id = :courseId", nativeQuery = true)
     List<ModuleModel> findAllModulesIntoCourse(@Param("courseId") UUID courseId);
+    
 }
